@@ -11,6 +11,6 @@ public class Merchant {
     @NotEmpty(message = "Sorry, the merchant id can't be empty, please try again")
     private String id;
     @NotEmpty(message = "Sorry, the merchant name can't be empty, please try again")
-    @Size(message = "Sorry, the merchant name can't be less than 3 characters long, please try again")
+    @Size(min = 3, message = "Sorry, the merchant name can't be less than 3 characters long, please try again")
     private String name;
 }
