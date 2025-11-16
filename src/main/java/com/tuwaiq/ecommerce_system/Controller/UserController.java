@@ -18,7 +18,6 @@ public class UserController {
 
     private final UserService userService;
 
-
     @PostMapping("/add")
     public ResponseEntity<?> addUser(@RequestBody @Valid User user, Errors errors){
         if (errors.hasErrors()){
