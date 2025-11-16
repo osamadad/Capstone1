@@ -19,7 +19,7 @@ public class UserService {
     }
 
     public Boolean updateUser(String id,User user){
-        for (int i=0;i<users.size()-1;i++) {
+        for (int i=0;i<users.size();i++) {
             if (users.get(i).getId().equalsIgnoreCase(id)){
                 users.set(i,user);
                 return true;
