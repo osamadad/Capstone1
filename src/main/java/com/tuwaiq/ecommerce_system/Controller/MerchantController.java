@@ -30,7 +30,7 @@ public class MerchantController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<?> getMerchant(){
+    public ResponseEntity<?> getMerchants(){
         ArrayList<Merchant> merchants= merchantService.getMerchants();
         if (merchants.isEmpty()){
             return ResponseEntity.status(400).body(new ApiResponse("There are no merchants to show"));
