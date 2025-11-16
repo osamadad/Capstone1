@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class User {
+    // add message to regex
     @NotEmpty(message = "Sorry, your id can't be empty, please try again")
     private String id;
     @NotEmpty(message = "Sorry, your username can't be empty, please try again")
