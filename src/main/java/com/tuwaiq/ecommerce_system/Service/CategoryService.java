@@ -19,7 +19,7 @@ public class CategoryService {
     }
 
     public Boolean updateCategory(String id,Category category){
-        for (int i = 0; i< categories.size()-1; i++) {
+        for (int i = 0; i< categories.size(); i++) {
             if (categories.get(i).getId().equalsIgnoreCase(id)){
                 categories.set(i,category);
                 return true;
