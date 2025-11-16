@@ -30,7 +30,7 @@ public class ProductController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<?> getCategories(){
+    public ResponseEntity<?> getProducts(){
         ArrayList<Product> products = productService.getProducts();
         if (products.isEmpty()){
             return ResponseEntity.status(400).body(new ApiResponse("There are no products to show"));
