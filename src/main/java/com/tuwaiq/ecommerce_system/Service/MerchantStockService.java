@@ -69,32 +69,44 @@ public class MerchantStockService {
     }
 
     public String increaseProductStock(String merchantId, String productId, int newStock) {
-        String errorType = "General error";
+        Boolean productFound = false;
         for (MerchantStock merchantStock : merchantStocks) {
             if (merchantStock.getMerchantId().equalsIgnoreCase(merchantId)) {
                 if (merchantStock.getProductId().equalsIgnoreCase(productId)) {
                     merchantStock.setStock(merchantStock.getStock() + newStock);
                     return "ok";
                 } else {
-                    errorType = "product id error";
+                    productFound=true;
                 }
-            } else {
-                errorType = "merchant id error";
             }
         }
-        return errorType;
+        if (productFound){
+            return "product id error";
+        }else {
+            return "merchant id error";
+        }
     }
 
     public String buyProduct(String userId, String merchantId, String productId) {
-        String errorType = "General error";
-        double productPrice = 0;
-        for (Product product : productService.getProducts()) {
-            if (product.getId().equalsIgnoreCase(productId)) {
-                productPrice = product.getPrice();
-            } else {
-                errorType = "product id error";
-            }
+        double productPrice = pricingProduct(productId,1);
+        if (productPrice == 0) {
+            return "product id error";
         }
+        return buying(userId, merchantId, productId, productPrice,1);
+    }
+
+    public String bulkBuyProducts(String userId, String merchantId, String productId, int count){
+        double productPrice = pricingProduct(productId, count);
+        if (productPrice == 0) {
+            return "product id error";
+        }
+        return buying(userId, merchantId, productId, productPrice,count);
+    }
+
+    private String buying(String userId, String merchantId, String productId, double productPrice, int count) {
+        boolean productFound = false;
+        boolean merchantFound = false;
+        boolean userFound = false;
         for (User user : userService.users) {
             if (user.getId().equalsIgnoreCase(userId)) {
                 for (MerchantStock merchantStock : merchantStocks) {
@@ -106,22 +118,46 @@ public class MerchantStockService {
                                     user.setBalance(user.getBalance() - productPrice);
                                     return "ok";
                                 } else {
-                                    errorType = "balance error";
+                                    return "balance error";
                                 }
                             } else {
-                                errorType = "stock error";
+                                return "stock error";
                             }
                         } else {
-                            errorType = "product error";
+                            productFound = true;
                         }
                     } else {
-                        errorType = "merchant id error";
+                        merchantFound = true;
                     }
                 }
             } else {
-                errorType = "user id error";
+                userFound = true;
             }
         }
-        return errorType;
+        if (!userFound) {
+            return "user id error";
+        }else if (!merchantFound){
+            return "merchant id error";
+        }else if ((!productFound)){
+            return "product id error";
+        }else {
+            return "general error";
+        }
+    }
+
+    private double pricingProduct(String productId,int count) {
+        for (Product product : productService.getProducts()) {
+            if (product.getId().equalsIgnoreCase(productId)) {
+                if (count>1){
+                    if (product.getCategoryId().equalsIgnoreCase("02001")){
+                        return product.getPrice()*count-(product.getPrice()*0.1);
+                    } else if (product.getCategoryId().equalsIgnoreCase("02002")) {
+                        return product.getPrice()*count-(product.getPrice()*0.5);
+                    }
+                }
+                return product.getPrice();
+            }
+        }
+        return 0;
     }
 }

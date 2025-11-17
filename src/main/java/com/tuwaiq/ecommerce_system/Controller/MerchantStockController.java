@@ -110,7 +110,7 @@ public class MerchantStockController {
     }
 
     @PutMapping("/bulk-buy-product/{userId}/{merchantId}/{productId}/{count}")
-    public ResponseEntity<?> buyProduct(@PathVariable String userId, @PathVariable String merchantId, @PathVariable String productId, @PathVariable int count){
+    public ResponseEntity<?> bulkBuyProduct(@PathVariable String userId, @PathVariable String merchantId, @PathVariable String productId, @PathVariable int count){
         String value= merchantStockService.bulkBuyProducts(userId,merchantId,productId,count);
         switch (value){
             case "ok":
