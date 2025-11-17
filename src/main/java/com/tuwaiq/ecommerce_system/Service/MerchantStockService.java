@@ -176,4 +176,22 @@ public class MerchantStockService {
         productStockFromAllMerchants.add(0,"The product "+productId+" have "+stockSum+" stocks in total");
         return productStockFromAllMerchants;
     }
+
+    public ArrayList<Product> getMoreProductFromMerchant(String merchantId){
+        ArrayList<Product> moreProduct = new ArrayList<>();
+        ArrayList<String> merchantProductIds = new ArrayList<>();
+        for (MerchantStock merchantStock:merchantStocks){
+            if (merchantStock.getMerchantId().equalsIgnoreCase(merchantId)){
+                merchantProductIds.add(merchantStock.getProductId());
+            }
+        }
+        for (Product product:productService.products){
+            for (String productId:merchantProductIds){
+                if (product.getId().equalsIgnoreCase(productId)){
+                    moreProduct.add(product);
+                }
+            }
+        }
+        return moreProduct;
+    }
 }

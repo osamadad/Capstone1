@@ -2,6 +2,7 @@ package com.tuwaiq.ecommerce_system.Controller;
 
 import Api.ApiResponse;
 import com.tuwaiq.ecommerce_system.Model.MerchantStock;
+import com.tuwaiq.ecommerce_system.Model.Product;
 import com.tuwaiq.ecommerce_system.Service.MerchantStockService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -138,6 +139,17 @@ public class MerchantStockController {
         }
         else {
             return ResponseEntity.status(200).body(productStockFromAllMerchants);
+        }
+    }
+
+    @GetMapping("/more-product-from-merchant/{merchantId}")
+    public ResponseEntity<?> getMoreProductFromMerchant(@PathVariable String merchantId){
+        ArrayList<Product> moreProducts=merchantStockService.getMoreProductFromMerchant(merchantId);
+        if (moreProducts.isEmpty()){
+            return ResponseEntity.status(400).body(new ApiResponse("There are no products found with this merchant id"));
+        }
+        else {
+            return ResponseEntity.status(200).body(moreProducts);
         }
     }
 }
