@@ -59,7 +59,16 @@ public class UserController {
             return ResponseEntity.status(200).body(new ApiResponse("The user have been deleted successfully"));
         }
         else {
-            return ResponseEntity.status(400).body(new ApiResponse("There are no user with that id found"));
+            return ResponseEntity.status(400).body(new ApiResponse("There is no user with that id found"));
+        }
+    }
+
+    @PutMapping("/add_balance/{id}/{addedBalance}")
+    public ResponseEntity<?> addBalanceFunds(@PathVariable String id, @PathVariable double addedBalance){
+        if (userService.addBalanceFunds(id,addedBalance)){
+            return ResponseEntity.status(200).body(new ApiResponse("The balance have been added successfully"));
+        }else {
+            return ResponseEntity.status(400).body(new ApiResponse("There is no user with this id found"));
         }
     }
 

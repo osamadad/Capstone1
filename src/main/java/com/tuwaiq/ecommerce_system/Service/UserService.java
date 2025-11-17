@@ -38,5 +38,15 @@ public class UserService {
         return false;
     }
 
+    public boolean addBalanceFunds(String id,double addedBalance){
+        for (User user:users){
+            if (user.getId().equalsIgnoreCase(id)){
+                user.setBalance(user.getBalance()+addedBalance);
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 }
