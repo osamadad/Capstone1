@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.BeanNameViewResolver;
 
 import java.util.ArrayList;
 
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 public class MerchantStockController {
 
     private final MerchantStockService merchantStockService;
-    private final BeanNameViewResolver beanNameViewResolver;
 
     @PostMapping("/add")
     public ResponseEntity<?> addMerchantStock(@RequestBody @Valid MerchantStock merchantStock, Errors errors){
@@ -67,16 +65,16 @@ public class MerchantStockController {
 
     @PutMapping("/increase-stock/{merchantId}/{productId}/{newStock}")
     public ResponseEntity<?> increaseProductStock(@PathVariable String merchantId, @PathVariable String productId, @PathVariable int newStock){
-        int value= merchantStockService.increaseProductStock(merchantId,productId,newStock);
+        String  value= merchantStockService.increaseProductStock(merchantId,productId,newStock);
         switch (value){
-            case 0:
+            case "ok":
                 return ResponseEntity.status(200).body(new ApiResponse("The new stock have been added successfully"));
-            case 1:
+            case "product id error":
                 return ResponseEntity.status(400).body(new ApiResponse("There are no product with this id found"));
-            case 2:
+            case "merchant id error":
                 return ResponseEntity.status(400).body(new ApiResponse("There are no merchant with this id found"));
             default:
-                return ResponseEntity.status(400).body(new ApiResponse("general error"));
+                return ResponseEntity.status(400).body(new ApiResponse("General error"));
         }
     }
 }
