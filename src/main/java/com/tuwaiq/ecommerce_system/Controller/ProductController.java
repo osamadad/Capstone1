@@ -24,8 +24,11 @@ public class ProductController {
             return ResponseEntity.status(400).body(new ApiResponse(errors.getFieldError().getDefaultMessage()));
         }
         else {
-            productService.addProduct(product);
-            return ResponseEntity.status(200).body(new ApiResponse("The product have been added successfully"));
+            if (productService.addProduct(product)){
+                return ResponseEntity.status(200).body(new ApiResponse("The product have been added successfully"));
+            }else {
+                return ResponseEntity.status(400).body(new ApiResponse("There are no category with this id found"));
+            }
         }
     }
 
