@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.BeanNameViewResolver;
 
 import java.util.ArrayList;
 
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 public class MerchantStockController {
 
     private final MerchantStockService merchantStockService;
-    private final BeanNameViewResolver beanNameViewResolver;
 
     @PostMapping("/add")
     public ResponseEntity<?> addMerchantStock(@RequestBody @Valid MerchantStock merchantStock, Errors errors){
@@ -26,8 +24,18 @@ public class MerchantStockController {
             return ResponseEntity.status(400).body(new ApiResponse(errors.getFieldError().getDefaultMessage()));
         }
         else {
-            merchantStockService.addMerchantStock(merchantStock);
-            return ResponseEntity.status(200).body(new ApiResponse("The merchant stock have been added successfully"));
+            String value= merchantStockService.addMerchantStock(merchantStock);
+            switch (value){
+                case "ok":
+                    return ResponseEntity.status(200).body(new ApiResponse("The merchant stock have been added successfully"));
+                case "product id error":
+                    return ResponseEntity.status(400).body(new ApiResponse(("There are no product with this id found")));
+                case "merchant id error":
+                    return ResponseEntity.status(400).body(new ApiResponse("There are no merchant with this id found"));
+                default:
+                    return ResponseEntity.status(400).body(new ApiResponse("General error"));
+
+            }
         }
     }
 
@@ -67,16 +75,37 @@ public class MerchantStockController {
 
     @PutMapping("/increase-stock/{merchantId}/{productId}/{newStock}")
     public ResponseEntity<?> increaseProductStock(@PathVariable String merchantId, @PathVariable String productId, @PathVariable int newStock){
-        int value= merchantStockService.increaseProductStock(merchantId,productId,newStock);
+        String  value= merchantStockService.increaseProductStock(merchantId,productId,newStock);
         switch (value){
-            case 0:
+            case "ok":
                 return ResponseEntity.status(200).body(new ApiResponse("The new stock have been added successfully"));
-            case 1:
+            case "product id error":
                 return ResponseEntity.status(400).body(new ApiResponse("There are no product with this id found"));
-            case 2:
+            case "merchant id error":
                 return ResponseEntity.status(400).body(new ApiResponse("There are no merchant with this id found"));
             default:
-                return ResponseEntity.status(400).body(new ApiResponse("general error"));
+                return ResponseEntity.status(400).body(new ApiResponse("General error"));
+        }
+    }
+
+    @PutMapping("/buy-product/{userId}/{merchantId}/{productId}")
+    public ResponseEntity<?> buyProduct(@PathVariable String userId, @PathVariable String merchantId, @PathVariable String productId){
+        String value= merchantStockService.buyProduct(userId,merchantId,productId);
+        switch (value){
+            case "ok":
+                return ResponseEntity.status(200).body(new ApiResponse("The product have been purchased successfully"));
+            case "user id error":
+                return ResponseEntity.status(400).body(new ApiResponse("There are no user with this id found"));
+            case "merchant id error":
+                return ResponseEntity.status(400).body(new ApiResponse("There are no merchant with this id found"));
+            case "product id error":
+                return ResponseEntity.status(400).body(new ApiResponse("There are no product with this id found"));
+            case "stock error":
+                return ResponseEntity.status(400).body(new ApiResponse("The product is out of stocks"));
+            case "balance error":
+                return ResponseEntity.status(400).body(new ApiResponse("There are no sufficient funds in your account to make this purchase"));
+            default:
+                return ResponseEntity.status(400).body(new ApiResponse("General error"));
         }
     }
 }

@@ -1,17 +1,27 @@
 package com.tuwaiq.ecommerce_system.Service;
 
+import com.tuwaiq.ecommerce_system.Model.Category;
 import com.tuwaiq.ecommerce_system.Model.Product;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
     
     ArrayList<Product> products = new ArrayList<>();
+    private final CategoryService categoryService;
 
-    public void addProduct(Product product){
-        products.add(product);
+    public boolean addProduct(Product product){
+        for (Category category:categoryService.categories){
+            if (category.getId().equalsIgnoreCase(product.getCategoryId())){
+                products.add(product);
+                return true;
+            }
+        }
+        return false;
     }
 
     public ArrayList<Product> getProducts(){
