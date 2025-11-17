@@ -2,6 +2,7 @@ package com.tuwaiq.ecommerce_system.Controller;
 
 import Api.ApiResponse;
 import com.tuwaiq.ecommerce_system.Model.MerchantStock;
+import com.tuwaiq.ecommerce_system.Model.Product;
 import com.tuwaiq.ecommerce_system.Service.MerchantStockService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -106,6 +107,49 @@ public class MerchantStockController {
                 return ResponseEntity.status(400).body(new ApiResponse("There are no sufficient funds in your account to make this purchase"));
             default:
                 return ResponseEntity.status(400).body(new ApiResponse("General error"));
+        }
+    }
+
+    @PutMapping("/bulk-buy-product/{userId}/{merchantId}/{productId}/{count}")
+    public ResponseEntity<?> bulkBuyProduct(@PathVariable String userId, @PathVariable String merchantId, @PathVariable String productId, @PathVariable int count){
+        String value= merchantStockService.bulkBuyProducts(userId,merchantId,productId,count);
+        switch (value){
+            case "ok":
+                return ResponseEntity.status(200).body(new ApiResponse("The products have been purchased successfully"));
+            case "user id error":
+                return ResponseEntity.status(400).body(new ApiResponse("There are no user with this id found"));
+            case "merchant id error":
+                return ResponseEntity.status(400).body(new ApiResponse("There are no merchant with this id found"));
+            case "product id error":
+                return ResponseEntity.status(400).body(new ApiResponse("There are no product with this id found"));
+            case "stock error":
+                return ResponseEntity.status(400).body(new ApiResponse("The product is out of stocks"));
+            case "balance error":
+                return ResponseEntity.status(400).body(new ApiResponse("There are no sufficient funds in your account to make this purchase"));
+            default:
+                return ResponseEntity.status(400).body(new ApiResponse("General error"));
+        }
+    }
+
+    @GetMapping("/get-total-stock/{productId}")
+    public ResponseEntity<?> getProductStockFromAllMerchants(@PathVariable String productId){
+        ArrayList<String> productStockFromAllMerchants=merchantStockService.getProductStockFromAllMerchants(productId);
+        if (productStockFromAllMerchants.isEmpty()){
+            return ResponseEntity.status(400).body(new ApiResponse("There are no product with this id found"));
+        }
+        else {
+            return ResponseEntity.status(200).body(productStockFromAllMerchants);
+        }
+    }
+
+    @GetMapping("/more-product-from-merchant/{merchantId}")
+    public ResponseEntity<?> getMoreProductFromMerchant(@PathVariable String merchantId){
+        ArrayList<Product> moreProducts=merchantStockService.getMoreProductFromMerchant(merchantId);
+        if (moreProducts.isEmpty()){
+            return ResponseEntity.status(400).body(new ApiResponse("There are no products found with this merchant id"));
+        }
+        else {
+            return ResponseEntity.status(200).body(moreProducts);
         }
     }
 }
