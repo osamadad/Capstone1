@@ -39,15 +39,20 @@ public class MerchantStockService {
         return false;
     }
 
-    public boolean increaseProductStock(String merchantId, String productId, int newStock){
+    public int increaseProductStock(String merchantId, String productId, int newStock){
+        int errorType=1;
         for (MerchantStock merchantStock: merchantStocks){
             if (merchantStock.getMerchantId().equalsIgnoreCase(merchantId)){
                 if (merchantStock.getProductId().equalsIgnoreCase(productId)){
                     merchantStock.setStock(merchantStock.getStock()+newStock);
-                    return true;
+                    return 0;
+                }else {
+                    errorType=1;
                 }
+            }else {
+                errorType=2;
             }
         }
-        return false;
+        return errorType;
     }
 }
