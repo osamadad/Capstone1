@@ -2,6 +2,7 @@ package com.tuwaiq.ecommerce_system.Service;
 
 import com.tuwaiq.ecommerce_system.Model.MerchantStock;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 
@@ -33,6 +34,18 @@ public class MerchantStockService {
             if (merchantStock.getId().equalsIgnoreCase(id)){
                 merchantStocks.remove(merchantStock);
                 return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean increaseProductStock(String merchantId, String productId, int newStock){
+        for (MerchantStock merchantStock: merchantStocks){
+            if (merchantStock.getMerchantId().equalsIgnoreCase(merchantId)){
+                if (merchantStock.getProductId().equalsIgnoreCase(productId)){
+                    merchantStock.setStock(merchantStock.getStock()+newStock);
+                    return true;
+                }
             }
         }
         return false;

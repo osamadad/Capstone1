@@ -62,4 +62,13 @@ public class MerchantStockController {
             return ResponseEntity.status(400).body(new ApiResponse("There are no merchant stock with that id found"));
         }
     }
+
+    @PutMapping("/increase-stock/{merchantId}/{productId}/{newStock}")
+    public ResponseEntity<?> increaseProductStock(@PathVariable String merchantId, @PathVariable String productId, @PathVariable int newStock){
+        if (merchantStockService.increaseProductStock(merchantId,productId,newStock)){
+            return ResponseEntity.status(200).body(new ApiResponse("The new stock have been added successfully"));
+        }else {
+            return ResponseEntity.status(400).body(new ApiResponse("There were no matches for product id or merchant id"));
+        }
+    }
 }
