@@ -1,6 +1,8 @@
 package com.tuwaiq.ecommerce_system.Service;
 
+import com.tuwaiq.ecommerce_system.Model.Merchant;
 import com.tuwaiq.ecommerce_system.Model.MerchantStock;
+import com.tuwaiq.ecommerce_system.Model.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -47,23 +49,21 @@ public class MerchantStockService {
     }
 
     public String merchantProductValidation(String merchantId, String productId) {
-        String errorType = "General error";
-        for (MerchantStock merchantStock : merchantStocks) {
-            if (merchantStock.getMerchantId().equalsIgnoreCase(merchantId)) {
-                if (merchantStock.getProductId().equalsIgnoreCase(productId)) {
-                    return "ok";
-                } else {
-                    errorType = "product id error";
-                }
-            } else {
-                errorType = "merchant id error";
+        for (Merchant merchant: merchantService.merchants){
+            if (!merchant.getId().equalsIgnoreCase(merchantId)){
+                return "merchant id error";
             }
         }
-        return errorType;
+        for (Product product: productService.products){
+            if (!product.getId().equalsIgnoreCase(productId)){
+                return "product id error";
+            }
+        }
+        return "ok";
     }
 
     public String increaseProductStock(String merchantId, String productId, int newStock) {
-        String errorType = "General fail";
+        String errorType = "General error";
         for (MerchantStock merchantStock : merchantStocks) {
             if (merchantStock.getMerchantId().equalsIgnoreCase(merchantId)) {
                 if (merchantStock.getProductId().equalsIgnoreCase(productId)) {
