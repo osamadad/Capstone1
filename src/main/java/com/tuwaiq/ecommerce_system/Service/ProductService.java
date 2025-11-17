@@ -64,4 +64,23 @@ public class ProductService {
         sortedProductByPrice.sort((product1, product2) -> Double.compare(product1.getPrice(), product2.getPrice()));
         return sortedProductByPrice;
     }
+
+    public int countProductInCategoryName(String categoryName){                 /* extra */
+        String categoryId="";
+        ArrayList<Product> products1 =new ArrayList<>();
+        for (Category category : categoryService.categories){
+            if (category.getName().equalsIgnoreCase(categoryName)){
+                categoryId= category.getId();
+            }
+        }
+        for (Product product:products){
+            if (product.getCategoryId().equalsIgnoreCase(categoryId)){
+                products1.add(product);
+            }
+        }
+        if (products.isEmpty()){
+            return 0;
+        }
+        return products1.size();
+    }
 }

@@ -75,4 +75,14 @@ public class ProductController {
             return ResponseEntity.status(200).body(sortedProduct);
         }
     }
+
+    @GetMapping("/product-count-in-category/{categoryName}")                                /* extra */
+    public ResponseEntity<?> countProductInCategoryName(@PathVariable String categoryName){
+        int count=productService.countProductInCategoryName(categoryName);
+        if (count==0){
+            return ResponseEntity.status(400).body(new ApiResponse("There are no products to show"));
+        }else {
+            return ResponseEntity.status(200).body(count);
+        }
+    }
 }
