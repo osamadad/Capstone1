@@ -2,6 +2,7 @@ package com.tuwaiq.ecommerce_system.Service;
 
 import com.tuwaiq.ecommerce_system.Model.Merchant;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 
