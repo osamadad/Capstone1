@@ -51,17 +51,21 @@ public class MerchantStockService {
     }
 
     public String merchantProductValidation(String merchantId, String productId) {
-        for (Merchant merchant: merchantService.merchants){
-            if (!merchant.getId().equalsIgnoreCase(merchantId)){
-                return "merchant id error";
+        String value = "General error";
+        for (Merchant merchant : merchantService.merchants) {
+            if (merchant.getId().equalsIgnoreCase(merchantId)) {
+                for (Product product : productService.products) {
+                    if (product.getId().equalsIgnoreCase(productId)) {
+                        return "ok";
+                    } else {
+                        value = "product id error";
+                    }
+                }
+            } else {
+                value = "merchant id error";
             }
         }
-        for (Product product: productService.products){
-            if (!product.getId().equalsIgnoreCase(productId)){
-                return "product id error";
-            }
-        }
-        return "ok";
+        return value;
     }
 
     public String increaseProductStock(String merchantId, String productId, int newStock) {
@@ -82,13 +86,13 @@ public class MerchantStockService {
     }
 
     public String buyProduct(String userId, String merchantId, String productId) {
-        String errorType="General error";
+        String errorType = "General error";
         double productPrice = 0;
         for (Product product : productService.getProducts()) {
             if (product.getId().equalsIgnoreCase(productId)) {
                 productPrice = product.getPrice();
-            }else {
-                errorType="product id error";
+            } else {
+                errorType = "product id error";
             }
         }
         for (User user : userService.users) {
@@ -98,24 +102,24 @@ public class MerchantStockService {
                         if (merchantStock.getProductId().equalsIgnoreCase(productId)) {
                             if (merchantStock.getStock() > 0) {
                                 if (user.getBalance() >= productPrice) {
-                                    merchantStock.setStock(merchantStock.getStock()-1);
-                                    user.setBalance(user.getBalance()-productPrice);
+                                    merchantStock.setStock(merchantStock.getStock() - 1);
+                                    user.setBalance(user.getBalance() - productPrice);
                                     return "ok";
-                                }else{
-                                    errorType="balance error";
+                                } else {
+                                    errorType = "balance error";
                                 }
-                            }else {
-                                errorType="stock error";
+                            } else {
+                                errorType = "stock error";
                             }
-                        }else {
-                            errorType="product error";
+                        } else {
+                            errorType = "product error";
                         }
-                    }else {
-                        errorType="merchant id error";
+                    } else {
+                        errorType = "merchant id error";
                     }
                 }
-            }else {
-                errorType="user id error";
+            } else {
+                errorType = "user id error";
             }
         }
         return errorType;
