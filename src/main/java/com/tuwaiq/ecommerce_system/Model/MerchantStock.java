@@ -1,5 +1,6 @@
 package com.tuwaiq.ecommerce_system.Model;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -14,6 +15,6 @@ public class MerchantStock {
     @NotEmpty(message = "Sorry, the merchant id can't be empty, please try again")
     private String merchantId;
     @NotNull(message = "Sorry, the stock can't be empty, please try again")
-    @Size(min = 10,  message = "Sorry, the stock can't be less than 10, please try again")
+    @Min(value = 10, message = "Sorry, the stock can't be less than 10, please try again")
     private int stock;
 }
