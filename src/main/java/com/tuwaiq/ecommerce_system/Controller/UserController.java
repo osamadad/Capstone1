@@ -62,4 +62,25 @@ public class UserController {
             return ResponseEntity.status(400).body(new ApiResponse("There are no user with that id found"));
         }
     }
+
+    @PutMapping("/buy-product/{userId}/{merchantId}/{productId}")
+    public ResponseEntity<?> buyProduct(@PathVariable String userId, @PathVariable String merchantId, @PathVariable String productId){
+        int value= userService.buyProduct(userId,merchantId,productId);
+        switch (value){
+            case 0:
+                return ResponseEntity.status(200).body(new ApiResponse("The product have been purchased successfully"));
+            case 1:
+                return ResponseEntity.status(400).body(new ApiResponse("There are no user with this id found"));
+            case 2:
+                return ResponseEntity.status(400).body(new ApiResponse("There are no merchant with this id found"));
+            case 3:
+                return ResponseEntity.status(400).body(new ApiResponse("There are no product with this id found"));
+            case 4:
+                return ResponseEntity.status(400).body(new ApiResponse("The product is out of stocks"));
+            case 5:
+                return ResponseEntity.status(400).body(new ApiResponse("There are no sufficient funds in your account to make this purchase"));
+            default:
+                return ResponseEntity.status(400).body(new ApiResponse("General error"));
+        }
+    }
 }
