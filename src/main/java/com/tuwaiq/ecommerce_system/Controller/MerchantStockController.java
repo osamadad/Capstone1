@@ -129,4 +129,15 @@ public class MerchantStockController {
                 return ResponseEntity.status(400).body(new ApiResponse("General error"));
         }
     }
+
+    @GetMapping("/get-total-stock/{productId}")
+    public ResponseEntity<?> getProductStockFromAllMerchants(@PathVariable String productId){
+        ArrayList<String> productStockFromAllMerchants=merchantStockService.getProductStockFromAllMerchants(productId);
+        if (productStockFromAllMerchants.isEmpty()){
+            return ResponseEntity.status(400).body(new ApiResponse("There are no product with this id found"));
+        }
+        else {
+            return ResponseEntity.status(200).body(productStockFromAllMerchants);
+        }
+    }
 }

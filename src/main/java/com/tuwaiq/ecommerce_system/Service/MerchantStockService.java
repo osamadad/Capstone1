@@ -160,4 +160,20 @@ public class MerchantStockService {
         }
         return 0;
     }
+
+    public ArrayList<String> getProductStockFromAllMerchants(String productId){
+        ArrayList<String> productStockFromAllMerchants = new ArrayList<>();
+        int stockSum=0;
+        for (MerchantStock merchantStock: merchantStocks){
+            if (merchantStock.getProductId().equalsIgnoreCase(productId)){
+                productStockFromAllMerchants.add("The product "+productId+" have "+merchantStock.getStock()+" stocks from "+merchantStock.getMerchantId());
+                stockSum+= merchantStock.getStock();
+            }
+        }
+        if (stockSum==0){
+            return productStockFromAllMerchants;
+        }
+        productStockFromAllMerchants.add(0,"The product "+productId+" have "+stockSum+" stocks in total");
+        return productStockFromAllMerchants;
+    }
 }

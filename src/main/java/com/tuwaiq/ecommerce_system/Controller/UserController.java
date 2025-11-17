@@ -63,7 +63,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/add_balance/{id}/{addedBalance}")
+    @PutMapping("/add-balance/{id}/{addedBalance}")
     public ResponseEntity<?> addBalanceFunds(@PathVariable String id, @PathVariable double addedBalance){
         if (userService.addBalanceFunds(id,addedBalance)){
             return ResponseEntity.status(200).body(new ApiResponse("The balance have been added successfully"));
