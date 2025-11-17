@@ -8,7 +8,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class User {
-    // add message to regex
     @NotEmpty(message = "Sorry, your id can't be empty, please try again")
     private String id;
     @NotEmpty(message = "Sorry, your username can't be empty, please try again")
@@ -25,6 +24,6 @@ public class User {
     @Pattern(regexp = "Admin|Customer",  message = "Sorry, your role can only be 'Admin' or 'Customer', please try again")
     private String role;
     @NotNull(message = "Sorry, your balance can't be empty, please try again")
-    @PositiveOrZero(message = "Sorry, your balance can't be less than 0, please try again")
+    @Positive(message = "Sorry, your balance can't be less than 0, please try again")
     private double balance;
 }
