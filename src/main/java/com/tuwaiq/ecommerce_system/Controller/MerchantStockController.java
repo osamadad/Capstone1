@@ -24,8 +24,18 @@ public class MerchantStockController {
             return ResponseEntity.status(400).body(new ApiResponse(errors.getFieldError().getDefaultMessage()));
         }
         else {
-            merchantStockService.addMerchantStock(merchantStock);
-            return ResponseEntity.status(200).body(new ApiResponse("The merchant stock have been added successfully"));
+            String value= merchantStockService.addMerchantStock(merchantStock);
+            switch (value){
+                case "ok":
+                    return ResponseEntity.status(200).body(new ApiResponse("The merchant stock have been added successfully"));
+                case "product id error":
+                    return ResponseEntity.status(400).body(new ApiResponse(("There are no product with this id found")));
+                case "merchant id error":
+                    return ResponseEntity.status(400).body(new ApiResponse("There are no merchant with this id found"));
+                default:
+                    return ResponseEntity.status(400).body(new ApiResponse("General error"));
+
+            }
         }
     }
 

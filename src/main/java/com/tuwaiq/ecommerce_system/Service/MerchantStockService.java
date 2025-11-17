@@ -14,28 +14,31 @@ public class MerchantStockService {
     private final ProductService productService;
     private final MerchantService merchantService;
 
-    public int addMerchantStock(MerchantStock merchantStock){
-        merchantStocks.add(merchantStock);
-        return 0;
+    public String addMerchantStock(MerchantStock merchantStock) {
+        String value = merchantProductValidation(merchantStock.getMerchantId(), merchantStock.getProductId());
+        if (value.equalsIgnoreCase("ok")) {
+            merchantStocks.add(merchantStock);
+        }
+        return value;
     }
 
-    public ArrayList<MerchantStock> getMerchantStocks(){
+    public ArrayList<MerchantStock> getMerchantStocks() {
         return merchantStocks;
     }
 
-    public Boolean updateMerchantStock(String id,MerchantStock merchantStock){
-        for (int i = 0; i< merchantStocks.size(); i++) {
-            if (merchantStocks.get(i).getId().equalsIgnoreCase(id)){
-                merchantStocks.set(i,merchantStock);
+    public Boolean updateMerchantStock(String id, MerchantStock merchantStock) {
+        for (int i = 0; i < merchantStocks.size(); i++) {
+            if (merchantStocks.get(i).getId().equalsIgnoreCase(id)) {
+                merchantStocks.set(i, merchantStock);
                 return true;
             }
         }
         return false;
     }
 
-    public Boolean deleteMerchantStock(String id){
-        for (MerchantStock merchantStock: merchantStocks){
-            if (merchantStock.getId().equalsIgnoreCase(id)){
+    public Boolean deleteMerchantStock(String id) {
+        for (MerchantStock merchantStock : merchantStocks) {
+            if (merchantStock.getId().equalsIgnoreCase(id)) {
                 merchantStocks.remove(merchantStock);
                 return true;
             }
@@ -43,28 +46,34 @@ public class MerchantStockService {
         return false;
     }
 
-//    public int merchantProductValidation(String merchantId, String productId){
-//        for (MerchantStock merchantStock: merchantStocks){
-//            if (merchantStock.getMerchantId().equalsIgnoreCase(merchantId)){
-//                if (merchantStock.getProductId().equalsIgnoreCase(productId)){
-//                    return 0;
-//                }
-//            }
-//        }
-//    }
-
-    public String  increaseProductStock(String merchantId, String productId, int newStock){
-        String errorType="General fail";
-        for (MerchantStock merchantStock: merchantStocks){
-            if (merchantStock.getMerchantId().equalsIgnoreCase(merchantId)){
-                if (merchantStock.getProductId().equalsIgnoreCase(productId)){
-                    merchantStock.setStock(merchantStock.getStock()+newStock);
+    public String merchantProductValidation(String merchantId, String productId) {
+        String errorType = "General error";
+        for (MerchantStock merchantStock : merchantStocks) {
+            if (merchantStock.getMerchantId().equalsIgnoreCase(merchantId)) {
+                if (merchantStock.getProductId().equalsIgnoreCase(productId)) {
                     return "ok";
-                }else {
-                    errorType="product id error";
+                } else {
+                    errorType = "product id error";
                 }
-            }else {
-                errorType="merchant id error";
+            } else {
+                errorType = "merchant id error";
+            }
+        }
+        return errorType;
+    }
+
+    public String increaseProductStock(String merchantId, String productId, int newStock) {
+        String errorType = "General fail";
+        for (MerchantStock merchantStock : merchantStocks) {
+            if (merchantStock.getMerchantId().equalsIgnoreCase(merchantId)) {
+                if (merchantStock.getProductId().equalsIgnoreCase(productId)) {
+                    merchantStock.setStock(merchantStock.getStock() + newStock);
+                    return "ok";
+                } else {
+                    errorType = "product id error";
+                }
+            } else {
+                errorType = "merchant id error";
             }
         }
         return errorType;
