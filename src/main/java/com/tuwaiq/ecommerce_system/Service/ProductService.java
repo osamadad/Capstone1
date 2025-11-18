@@ -48,14 +48,8 @@ public class ProductService {
         return false;
     }
 
-    public ArrayList<Product> getProductsByCategorySortedByPrice(String category){
-        String categoryId="";
+    public ArrayList<Product> getProductsByCategorySortedByPrice(String categoryId){
         ArrayList<Product> sortedProductByPrice=new ArrayList<>();
-        for (Category category1: categoryService.categories){
-            if (category1.getName().equalsIgnoreCase(category)){
-                categoryId=category1.getId();
-            }
-        }
         for (Product product:products){
             if (product.getCategoryId().equalsIgnoreCase(categoryId)){
                 sortedProductByPrice.add(product);

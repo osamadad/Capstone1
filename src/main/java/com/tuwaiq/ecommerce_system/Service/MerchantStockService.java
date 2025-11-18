@@ -114,7 +114,7 @@ public class MerchantStockService {
                         if (merchantStock.getProductId().equalsIgnoreCase(productId)) {
                             if (merchantStock.getStock() > 0) {
                                 if (user.getBalance() >= productPrice) {
-                                    merchantStock.setStock(merchantStock.getStock() - 1);
+                                    merchantStock.setStock(merchantStock.getStock() - count);
                                     user.setBalance(user.getBalance() - productPrice);
                                     return "ok";
                                 } else {

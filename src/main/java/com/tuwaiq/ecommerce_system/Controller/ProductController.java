@@ -82,7 +82,7 @@ public class ProductController {
         if (count==0){
             return ResponseEntity.status(400).body(new ApiResponse("There are no products to show"));
         }else {
-            return ResponseEntity.status(200).body(count);
+            return ResponseEntity.status(200).body(new ApiResponse("The numbers of products in this category is "+count));
         }
     }
 }
